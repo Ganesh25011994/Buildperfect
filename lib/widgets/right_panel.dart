@@ -17,6 +17,7 @@ import 'package:dashboard/widgets/page_props_button_segment.dart';
 import 'package:dashboard/widgets/rightpanels/actions_panel.dart';
 import 'package:dashboard/widgets/rightpanels/datasource.dart';
 import 'package:dashboard/widgets/rightpanels/props_panel.dart';
+import 'package:dashboard/widgets/save_edit_view_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,7 +34,7 @@ class RightPanel extends StatefulWidget {
 
 class _RightPanelState extends State<RightPanel> {
   late double panelWidth = widget.width;
-  double gutterHeight = 70;
+  double gutterHeight = 82;
   late double panelHeight = widget.height - gutterHeight;
   Set<PagePropsSegmentButton> selectedSegmentButton = {
     PagePropsSegmentButton.property,
@@ -74,6 +75,16 @@ class _RightPanelState extends State<RightPanel> {
         padding: const EdgeInsets.all(8),
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SaveEditViewButtonWidget(
+                  jsonHeaderName: "BPWidget",
+                  jsonObject: reffinalJsonData
+                ),
+              ]
+            ),
+            SizedBox(height: 5),
             PagePropsButtonSegment(
               onSegmentChanged: _segementButtonChangedListener,
             ),
@@ -84,3 +95,12 @@ class _RightPanelState extends State<RightPanel> {
     );
   }
 }
+
+final reffinalJsonData = {
+  "lableText": "Gender",
+  "formControlType": "personal_gender",
+  "controlType": "TextField",
+  "required": true,
+  "verificationrequired": false,
+  "validation": null
+};

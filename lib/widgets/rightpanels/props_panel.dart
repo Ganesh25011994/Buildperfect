@@ -13,6 +13,9 @@ class PropsPanel extends StatefulWidget {
 }
 
 class _PropsPanelState extends State<PropsPanel> {
+  TextEditingController lableController = TextEditingController();
+  TextEditingController formControlNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<BpwidgetPropsBloc, BpwidgetPropsState>(
@@ -51,8 +54,8 @@ class _PropsPanelState extends State<PropsPanel> {
                       SizedBox(
                         width: widget.width * 0.5,
                         height: 25,
-
                         child: TextField(
+                          controller: lableController,
                           style: TextStyle(fontSize: 12),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.only(left: 8),
@@ -90,8 +93,8 @@ class _PropsPanelState extends State<PropsPanel> {
                       SizedBox(
                         width: widget.width * 0.5,
                         height: 25,
-
                         child: TextField(
+                          controller: formControlNameController,
                           style: TextStyle(fontSize: 12),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.only(left: 8),
@@ -129,7 +132,6 @@ class _PropsPanelState extends State<PropsPanel> {
                       SizedBox(
                         width: widget.width * 0.5,
                         height: 25,
-
                         child: TextField(
                           style: TextStyle(fontSize: 12),
                           decoration: InputDecoration(
@@ -207,7 +209,6 @@ class _PropsPanelState extends State<PropsPanel> {
                       SizedBox(
                         width: widget.width * 0.5,
                         height: 25,
-
                         child: TextField(
                           style: TextStyle(fontSize: 12),
                           decoration: InputDecoration(

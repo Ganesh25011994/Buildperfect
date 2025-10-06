@@ -24,7 +24,7 @@ class _ActionsPanelState extends State<ActionsPanel> {
             PanelHeader(
               panelWidth: widget.width,
               title: 'Configure Formcontrol Actions',
-            ),
+            )
           ],
         ),
       ),
