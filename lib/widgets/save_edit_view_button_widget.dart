@@ -1,10 +1,11 @@
+import 'package:dashboard/bloc/bpwidgetprops/bpwidget_props_bloc.dart';
 import 'package:dashboard/widgets/json_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SaveEditViewButtonWidget extends StatelessWidget {
   final String jsonHeaderName;
-  final Map<String,dynamic> jsonObject;
-  const SaveEditViewButtonWidget({super.key, required this.jsonHeaderName, required this.jsonObject});
+  const SaveEditViewButtonWidget({super.key, required this.jsonHeaderName});
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -30,17 +31,24 @@ class SaveEditViewButtonWidget extends StatelessWidget {
           color: Colors.blue,
           icon: Icons.visibility,
           onPressed: () {
-             print(" before to Open Json Viewer");
-             Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (_) => JsonViewer(
-                      jsonHeader: jsonHeaderName,
-                      jsonObject: jsonObject
-                    )
-              ),
-            );
+            try {
+              final bpWidgetProps = context.read<BpwidgetPropsBloc>().state.bpwidgetProps;
+              final Map<String,dynamic> jsonObject = bpWidgetProps.toMap();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (_) => JsonViewer(
+                        jsonHeader: jsonHeaderName,
+                        jsonObject: jsonObject
+                      )
+                ),
+              );
+            } catch (error) {
+              print("finally _buildCircleButton error => $error");
+            }
+            
+            
           },
         ),
       ],

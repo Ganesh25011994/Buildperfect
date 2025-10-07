@@ -9,4 +9,9 @@ abstract class BpwidgetPropsEvent {}
 
 class BPwidgetPropsInit extends BpwidgetPropsEvent {}
 
-class BPWidgetPropsSave extends BpwidgetPropsEvent {}
+class BPWidgetPropsSave extends BpwidgetPropsEvent {
+  final BpwidgetProps bpwidgetProps;
+  BPWidgetPropsSave({required this.bpwidgetProps});
+}
+
+

@@ -80,7 +80,6 @@ class _RightPanelState extends State<RightPanel> {
               children: [
                 SaveEditViewButtonWidget(
                   jsonHeaderName: "BPWidget",
-                  jsonObject: reffinalJsonData
                 ),
               ]
             ),
@@ -97,10 +96,66 @@ class _RightPanelState extends State<RightPanel> {
 }
 
 final reffinalJsonData = {
-  "lableText": "Gender",
-  "formControlType": "personal_gender",
-  "controlType": "TextField",
-  "required": true,
-  "verificationrequired": false,
-  "validation": null
+  "BuildPerfectDataObject": {
+    "clientId": "string",
+    "applicationName": "string",
+    "applicationId": "string",
+    "bpWidgets": [
+      {
+        "pageName": "string",
+        "pageId": "string",
+        "onInit": "callback",
+        "pageComponentsList": [
+          {
+            "bpformGroup": {
+              "formFieldBox": [
+                {
+                  "properties": {
+                    "label": "string",
+                    "formControlsName": "string",
+                    "formType": "formTypeName",
+                    "required": true,
+                    "Pattern": "string (optional)",
+                    "maxlangth": 10,
+                    "minlength": 1,
+                    "valiation": true
+                  },
+                  "actions": {
+                    "onChange": "callback"
+                  },
+                  "dataList": {
+                    "masterName": "string",
+                    "headername": "string"
+                  }
+                }
+              ]
+            },
+            "cardListComponent": {
+              "cardProperties": {},
+              "cardAction": {}
+            },
+            "dialogComponent": {
+              "headerMsg": "string",
+              "message": "string"
+            },
+            "buttonAction": [
+              {
+                "actionType": "apiCall",
+                "naviagationAction": {
+                  "dataMap": {},
+                  "navigationPage": "string"
+                },
+                "apiCallaction": {
+                  "apiMethodName": "string",
+                  "requestObject": {},
+                  "SuccessMessage": "string (optional)",
+                  "errorMessage": "string (optional)"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 };

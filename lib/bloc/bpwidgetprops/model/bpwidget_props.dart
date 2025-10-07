@@ -66,7 +66,8 @@ class BpwidgetProps {
       'max': max,
       'min': min,
       'isVerificationRequired': isVerificationRequired,
-      'validationPatterns': validationPatterns!.map((x) => x.name).toList(),
+      // 'validationPatterns': validationPatterns!.map((x) => x.name).toList(),
+      'validationPatterns': validationPatterns == null ? [] : validationPatterns!.map((x) => x.name).toList(),
     };
   }
 
