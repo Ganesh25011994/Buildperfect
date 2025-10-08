@@ -8,12 +8,10 @@
 import 'package:flutter/material.dart';
 
 class KeyValueTextbox extends StatefulWidget {
-  final TextEditingController textController;
   final double width;
   final String labeltext;
   const KeyValueTextbox({
     super.key,
-    required this.textController,
     required this.width,
     required this.labeltext,
   });
@@ -44,9 +42,7 @@ class _KeyValueTextboxState extends State<KeyValueTextbox> {
         SizedBox(
           width: widget.width * 0.5,
           height: 25,
-
           child: TextField(
-            controller: widget.textController,
             style: TextStyle(fontSize: 12),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 8),

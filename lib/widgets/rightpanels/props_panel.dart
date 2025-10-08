@@ -5,6 +5,7 @@ import 'package:dashboard/widgets/customcontrols/key_value_textbox.dart';
 import 'package:dashboard/widgets/rightpanels/panel_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
 class PropsPanel extends StatefulWidget {
   final double width;
@@ -15,12 +16,18 @@ class PropsPanel extends StatefulWidget {
   State<PropsPanel> createState() => _PropsPanelState();
 }
 
+FormGroup bpWidgetPropsFormGroup = FormGroup({
+  'label': FormControl<String>(validators: [Validators.required]),
+  'formName': FormControl<String>(value: 'personal_', validators: [Validators.required]),
+  'formType': FormControl<String>(validators: [Validators.required]),
+  'validationRequired': FormControl<String>(),
+  'verificationRequired': FormControl<String>(),
+  'minlength': FormControl<String>(),
+  'maxlength': FormControl<String>(),
+  'patternValidation': FormControl<String>(),
+});
+
 class _PropsPanelState extends State<PropsPanel> {
-  TextEditingController labelController = TextEditingController();
-  TextEditingController formNameController = TextEditingController();
-  TextEditingController formTypeController = TextEditingController();
-  TextEditingController minLengthController = TextEditingController();
-  TextEditingController maxLengthController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<BpwidgetPropsBloc, BpwidgetPropsState>(
@@ -38,18 +45,19 @@ class _PropsPanelState extends State<PropsPanel> {
                   panelWidth: widget.width,
                   title: 'Configure Formcontrol Properties',
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: KeyValueTextbox(
-                    textController: labelController,
-                    labeltext: 'Label Text',
-                    width: widget.width,
+                ReactiveForm(
+                  formGroup: bpWidgetPropsFormGroup,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: KeyValueTextbox(
+                      labeltext: 'Label Text',
+                      width: widget.width,
+                    ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: KeyValueTextbox(
-                    textController: formNameController,
                     labeltext: 'Control Name',
                     width: widget.width,
                   ),
@@ -57,7 +65,6 @@ class _PropsPanelState extends State<PropsPanel> {
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: KeyValueTextbox(
-                    textController: formTypeController,
                     width: widget.width,
                     labeltext: 'Control Type',
                   ),
@@ -93,7 +100,6 @@ class _PropsPanelState extends State<PropsPanel> {
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: KeyValueTextbox(
-                    textController: minLengthController,
                     width: widget.width,
                     labeltext: 'Minlength',
                   ),
@@ -101,7 +107,6 @@ class _PropsPanelState extends State<PropsPanel> {
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: KeyValueTextbox(
-                    textController: maxLengthController,
                     width: widget.width,
                     labeltext: 'Maxlength',
                   ),
@@ -134,15 +139,7 @@ class _PropsPanelState extends State<PropsPanel> {
                   padding: const EdgeInsets.all(8),
                   child: ElevatedButton(
                     onPressed: () {
-                      context.read<BpwidgetPropsBloc>().add(BPWidgetPropsSave(
-                        bpwidgetProps: BpwidgetProps(
-                          label: labelController.text, 
-                          controlName: formNameController.text, 
-                          controlType: formTypeController.text,
-                          max: int.parse(maxLengthController.text),
-                          min: int.parse(minLengthController.text),
-                        )
-                      ));
+                      
                     }, 
                     child: Text('Save')
                   )
