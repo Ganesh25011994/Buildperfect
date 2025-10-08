@@ -264,7 +264,6 @@ class _ItemsPanelState extends State<ItemPanel> {
               Widget child = SizedBox(
                 height: 50,
                 width: 0,
-
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
