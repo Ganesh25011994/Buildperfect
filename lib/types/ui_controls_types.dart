@@ -13,4 +13,5 @@ enum ValidationPattern {
   alphanumeric,
   specialcharalphanumeric,
   custom,
+  nodata
 }

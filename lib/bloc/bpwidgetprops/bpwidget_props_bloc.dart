@@ -15,20 +15,18 @@ part 'bpwidget_props_state.dart';
 
 class BpwidgetPropsBloc extends Bloc<BpwidgetPropsEvent, BpwidgetPropsState> {
   BpwidgetPropsBloc() : super(BpwidgetPropsState.init()) {
-    on<BPWidgetPropsSave>(saveBpWidgetprops);
+    on<BPwidgetPropsInit>(onBPwidgetPropsInit);
+    on<BPWidgetPropsSave>(onBPwidgetPropsSave);
   }
 
-  saveBpWidgetprops(BPWidgetPropsSave event, Emitter emit ) {
-    try {
-      print("event final value => ${event.bpwidgetProps}");
-      emit(
-        state.copyWith(
-          bpwidgetProps: event.bpwidgetProps
-        )
-      );
-    } catch(error) {
-      print("saveBpWidgetprops-error $error");
-    }
+  Future<void> onBPwidgetPropsInit(BPwidgetPropsInit ev, Emitter emit) async {
+    print('calling onBPwidgetPropsInit');
+    emit(BpwidgetPropsState.init());
   }
 
+  Future<void> onBPwidgetPropsSave(BPWidgetPropsSave event, Emitter emit) async{
+    emit(state.copyWith(
+      bpwidgetProps: event.bpwidgetProps
+    ));
+  }
 }
