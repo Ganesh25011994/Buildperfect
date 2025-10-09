@@ -13,8 +13,6 @@ class BPwidgetPropsInit extends BpwidgetPropsEvent {
 }
 
 class BPWidgetPropsSave extends BpwidgetPropsEvent {
-  final BpwidgetProps bpwidgetProps;
-  BPWidgetPropsSave({required this.bpwidgetProps});
+  final BpwidgetProps props;
+  BPWidgetPropsSave({required this.props});
 }
-
-

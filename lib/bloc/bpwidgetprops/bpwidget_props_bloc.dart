@@ -24,9 +24,8 @@ class BpwidgetPropsBloc extends Bloc<BpwidgetPropsEvent, BpwidgetPropsState> {
     emit(BpwidgetPropsState.init());
   }
 
-  Future<void> onBPwidgetPropsSave(BPWidgetPropsSave event, Emitter emit) async{
-    emit(state.copyWith(
-      bpwidgetProps: event.bpwidgetProps
-    ));
+  Future<void> onBPwidgetPropsSave(BPWidgetPropsSave ev, Emitter emit) async {
+    print('calling onBPwidgetPropsSave => ${ev.props}');
+    emit(state.copyWith(bpwidgetProps: ev.props, saveStatus: SaveStatus.saved));
   }
 }

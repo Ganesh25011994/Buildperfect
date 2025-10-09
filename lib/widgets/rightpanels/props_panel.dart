@@ -43,10 +43,13 @@ class _PropsPanelState extends State<PropsPanel> {
       listener: (context, state) {},
       builder: (context, state) {
         print('PropsPanel => ${state.bpwidgetProps}');
-        bpWidgetPropsForm.controls['label']?.updateValue(widget.props!.label);
+        bpWidgetPropsForm.controls['label']?.updateValue(
+          state.bpwidgetProps.label != null || state.bpwidgetProps.label != ''
+              ? state.bpwidgetProps.label
+              : widget.props!.label,
+        );
         bpWidgetPropsForm.controls['controlName']?.updateValue(
-          state.bpwidgetProps.controlName +
-              bpWidgetPropsForm.controls["label"]!.value.toString(),
+          state.bpwidgetProps.controlName,
         );
         bpWidgetPropsForm.controls['controlType']?.updateValue(
           widget.props!.controlType,
@@ -95,7 +98,7 @@ class _PropsPanelState extends State<PropsPanel> {
                     child: KeyValueReactiveDropdown(
                       width: widget.width,
                       labeltext: 'Required ?',
-                      dropdownEntries: ['true', 'false'],
+                      dropdownEntries: ["true", "false"],
                       onSelected: (value) {
                         print('type of isRequired is => ${value.runtimeType}');
                         bpWidgetPropsForm.controls['isRequired']!.updateValue(value);
@@ -146,6 +149,7 @@ class _PropsPanelState extends State<PropsPanel> {
                         'Passport',
                         'GST',
                         'UPI',
+                        'None',
                       ],
                       width: widget.width,
                       labeltext: 'Validations',
@@ -160,56 +164,25 @@ class _PropsPanelState extends State<PropsPanel> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent
-                          ),
-                          onPressed: () {}, 
-                          child: Text('Edit', style: TextStyle(color: Colors.white))
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.teal.shade400,
-                          ),
+                        ElevatedButton.icon(
                           onPressed: () {
-                            if (bpWidgetPropsForm.valid) {
-                              final mandatory = bpWidgetPropsForm.controls['isRequired']!.value == 'true' ? true : false;
-                              final verficationRequired = bpWidgetPropsForm.controls['isVerificationRequired']!.value == 'true' ? true : false;
-                              final ValidationPattern validationPatternList = ValidationPattern.values.firstWhere(
-                                (val) => val.toString() == 'ValidationPattern.${bpWidgetPropsForm.controls['validationPatterns']!.value}',
-                                orElse: () => ValidationPattern.nodata
-                              );
-
-                              final storeProps = BpwidgetProps(
-                                label: bpWidgetPropsForm.controls['label']!.value.toString(), 
-                                controlName: bpWidgetPropsForm.controls['controlName']!.value.toString(), 
-                                controlType: bpWidgetPropsForm.controls['controlType']!.value.toString(),
-                                isRequired: mandatory,
-                                max: int.parse(bpWidgetPropsForm.controls['max']!.value.toString()),
-                                min: int.parse(bpWidgetPropsForm.controls['min']!.value.toString()),
-                                isVerificationRequired: verficationRequired,
-                                validationPatterns: validationPatternList == ValidationPattern.nodata ? [] : [validationPatternList]
-                              );
-                              print("storeProps $storeProps");
-
-                              context.read<BpwidgetPropsBloc>().add(
-                                BPWidgetPropsSave(
-                                  bpwidgetProps: storeProps
-                                )
-                              );
-                            } else {
-                              bpWidgetPropsForm.markAllAsTouched();
-                            }
-                            
-                          }, 
-                          child: Text('Save', style: TextStyle(color: Colors.white))
-                        )
+                            print(
+                              'bpWidgetPropsForm.value => ${bpWidgetPropsForm.value}',
+                            );
+                            context.read<BpwidgetPropsBloc>().add(
+                              BPWidgetPropsSave(
+                                props: BpwidgetProps.fromMap(
+                                  bpWidgetPropsForm.value,
+                                ),
+                              ),
+                            );
+                          },
+                          label: Text('save'),
+                          icon: Icon(Icons.save),
+                        ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

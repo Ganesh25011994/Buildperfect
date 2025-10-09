@@ -68,22 +68,46 @@ class _ItemsPanelState extends State<ItemPanel> {
           setState(() {});
         },
         labelText: 'label ${index + 1}',
-        child: TextField(
-          enabled: false, // enabled: selectedIndex == index ? true : false,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Textbox',
-            label: Text('TextField'),
-            floatingLabelStyle: TextStyle(fontSize: 14),
-
-            disabledBorder:
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border:
                 selectedIndex == index
-                    ? OutlineInputBorder(
-                      borderSide: GlobalStyles.selectedBorderStyle,
-                    )
-                    : OutlineInputBorder(
-                      borderSide: GlobalStyles.unselectedBorderStyle,
-                    ),
+                    ? Border.all(width: 2, color: Colors.teal)
+                    : Border.all(width: 2, color: Colors.transparent),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: 300,
+                child: TextField(
+                  enabled:
+                      false, // enabled: selectedIndex == index ? true : false,
+                  decoration: InputDecoration(
+                    // border: OutlineInputBorder(
+                    //   borderSide: BorderSide(color: Colors.transparent),
+                    // ),
+                    hintText: 'Textbox',
+                    label: Text('TextField'),
+                    floatingLabelStyle: TextStyle(fontSize: 14),
+
+                    // disabledBorder:
+                    //     selectedIndex == index
+                    //         ? OutlineInputBorder(
+                    //           borderRadius: BorderRadius.circular(10),
+                    //           borderSide: GlobalStyles.selectedBorderStyle,
+                    //         )
+                    //         : OutlineInputBorder(
+                    //           borderSide: GlobalStyles.unselectedBorderStyle,
+                    //         ),
+                  ),
+                ),
+              ),
+              selectedIndex == index
+                  ? GlobalStyles.selectedIcon
+                  : GlobalStyles.fillerSizedBox50,
+            ],
           ),
         ),
       ),
@@ -98,20 +122,45 @@ class _ItemsPanelState extends State<ItemPanel> {
           setState(() {});
         },
         labelText: 'label ${index + 1}',
-        child: DropdownMenu(
-          dropdownMenuEntries: [],
-          enabled: false,
-          hintText: 'DropDownField',
-          width: 300,
-          inputDecorationTheme: InputDecorationTheme(
-            disabledBorder:
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border:
                 selectedIndex == index
-                    ? OutlineInputBorder(
-                      borderSide: GlobalStyles.selectedBorderStyle,
-                    )
-                    : OutlineInputBorder(
-                      borderSide: GlobalStyles.unselectedBorderStyle,
-                    ),
+                    ? Border.all(width: 2, color: Colors.teal)
+                    : Border.all(width: 2, color: Colors.transparent),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+            children: [
+              SizedBox(
+                width: 300,
+                child: DropdownMenu(
+                  dropdownMenuEntries: [],
+                  enabled: false,
+                  hintText: 'DropDownField',
+                  width: 300,
+                  inputDecorationTheme: InputDecorationTheme(
+                    disabledBorder: InputBorder.none,
+                  ),
+                  // inputDecorationTheme: InputDecorationTheme(
+                  //   disabledBorder:
+                  //       selectedIndex == index
+                  //           ? OutlineInputBorder(
+                  //             borderRadius: BorderRadius.circular(10),
+                  //             borderSide: GlobalStyles.selectedBorderStyle,
+                  //           )
+                  //           : OutlineInputBorder(
+                  //             borderSide: GlobalStyles.unselectedBorderStyle,
+                  //           ),
+                  // ),
+                ),
+              ),
+              selectedIndex == index
+                  ? GlobalStyles.selectedIcon
+                  : GlobalStyles.fillerSizedBox50,
+            ],
           ),
         ),
       ),
@@ -127,35 +176,85 @@ class _ItemsPanelState extends State<ItemPanel> {
         },
 
         labelText: 'label ${index + 1}',
-        child: DottedBorder(
-          options: RectDottedBorderOptions(
-            dashPattern: [10, 10],
-            color: selectedIndex == index ? Colors.teal : Colors.transparent,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border:
+                selectedIndex == index
+                    ? Border.all(width: 2, color: Colors.teal)
+                    : Border.all(width: 2, color: Colors.transparent),
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
             children: [
-              Checkbox(
-                value: true,
-                onChanged: (value) {},
-                semanticLabel: 'Checkbox',
+              SizedBox(
+                width: 200,
+                height: 70,
+                child: Row(
+                  children: [
+                    Checkbox(
+                      value: true,
+                      onChanged: (value) {},
+                      semanticLabel: 'Checkbox',
+                    ),
+                    Text('Checkbox'),
+                  ],
+                ),
               ),
-              Text('Checkbox'),
+              GlobalStyles.fillerSizedBox50,
+              selectedIndex == index
+                  ? GlobalStyles.selectedIcon
+                  : GlobalStyles.fillerSizedBox50,
             ],
           ),
         ),
       ),
       PlaceholderWidgets.Radio => DraggedHolder(
+        onTapDraggedControl: () {
+          selectedIndex = index;
+
+          BpwidgetProps bpWidgetPropsObj = getWidgetProps(
+            widget.items[selectedIndex],
+          );
+          widget.onItemClicked!(bpWidgetPropsObj);
+          setState(() {});
+        },
         labelText: 'label ${index + 1}',
-        child: Row(
-          children: [
-            Radio(
-              toggleable: false,
-              value: '',
-              groupValue: '',
-              onChanged: (value) {},
-            ),
-            Text('Radio'),
-          ],
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border:
+                selectedIndex == index
+                    ? Border.all(width: 2, color: Colors.teal)
+                    : Border.all(width: 2, color: Colors.transparent),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+            children: [
+              SizedBox(
+                width: 200,
+                height: 70,
+
+                child: Row(
+                  children: [
+                    Radio(
+                      toggleable: false,
+                      value: '',
+                      groupValue: '',
+                      onChanged: (value) {},
+                    ),
+                    Text('Radio'),
+                  ],
+                ),
+              ),
+              GlobalStyles.fillerSizedBox50,
+              selectedIndex == index
+                  ? GlobalStyles.selectedIcon
+                  : GlobalStyles.fillerSizedBox50,
+            ],
+          ),
         ),
       ),
       PlaceholderWidgets.Button => Row(
@@ -198,7 +297,6 @@ class _ItemsPanelState extends State<ItemPanel> {
               Widget child = SizedBox(
                 height: 50,
                 width: 0,
-
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
