@@ -179,7 +179,7 @@ class _PropsPanelState extends State<PropsPanel> {
                               final mandatory = bpWidgetPropsForm.controls['isRequired']!.value == 'true' ? true : false;
                               final verficationRequired = bpWidgetPropsForm.controls['isVerificationRequired']!.value == 'true' ? true : false;
                               final ValidationPattern validationPatternList = ValidationPattern.values.firstWhere(
-                                (val) => val.toString() == bpWidgetPropsForm.controls['validationPatterns']!.value,
+                                (val) => val.toString() == 'ValidationPattern.${bpWidgetPropsForm.controls['validationPatterns']!.value}',
                                 orElse: () => ValidationPattern.nodata
                               );
 
