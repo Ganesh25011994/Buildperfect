@@ -1,4 +1,5 @@
 import 'package:dashboard/bloc/bpwidgetprops/bpwidget_props_bloc.dart';
+import 'package:dashboard/bloc/bpwidgets/bpwidget_bloc.dart';
 import 'package:dashboard/widgets/json_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,8 +33,9 @@ class SaveEditViewButtonWidget extends StatelessWidget {
           icon: Icons.visibility,
           onPressed: () {
             try {
-              final bpWidgetProps = context.read<BpwidgetPropsBloc>().state.bpwidgetProps;
-              final Map<String,dynamic> jsonObject = bpWidgetProps.toMap();
+              final listbpWidgetProps = context.read<BpwidgetBloc>().state;
+              final Map<String,dynamic> jsonObject = listbpWidgetProps.toMap();
+              print("final bpWidgetPropsList $jsonObject");
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -46,6 +48,8 @@ class SaveEditViewButtonWidget extends StatelessWidget {
               );
             } catch (error) {
               print("finally _buildCircleButton error => $error");
+              final listbpWidgetProps = context.read<BpwidgetBloc>().state.bpWidgetsList;
+              print("finally listbpWidgetProps value => $listbpWidgetProps");
             }
             
             

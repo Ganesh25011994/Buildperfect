@@ -80,29 +80,15 @@ class _RightPanelState extends State<RightPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => BpwidgetPropsBloc(), lazy: false),
-      ],
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SaveEditViewButtonWidget(
-                  jsonHeaderName: "BPWidget",
-                ),
-              ]
-            ),
-            SizedBox(height: 5),
-            PagePropsButtonSegment(
-              onSegmentChanged: _segementButtonChangedListener,
-            ),
-            renderPanelsBasedOnSegment(),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: [
+          PagePropsButtonSegment(
+            onSegmentChanged: _segementButtonChangedListener,
+          ),
+          renderPanelsBasedOnSegment(),
+        ],
       ),
     );
   }
