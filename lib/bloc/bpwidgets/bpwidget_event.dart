@@ -13,3 +13,8 @@ class BpwidgetLoadProps extends BpwidgetEvent {
   final BPWidget? bpWidget;
   BpwidgetLoadProps({this.bpWidget});
 }
+
+class BpwidgetLoadAction extends BpwidgetEvent {
+  final BPWidget? bpWidget;
+  BpwidgetLoadAction({this.bpWidget});
+}
