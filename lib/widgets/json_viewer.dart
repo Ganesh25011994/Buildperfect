@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_json/flutter_json.dart';
 
@@ -17,7 +18,7 @@ class JsonViewer extends StatelessWidget {
         json: jsonObject,
         initialExpandDepth: 5,
         hiddenKeys: hiddenKeyList ?? [],
-      ),
+      )
     );
   }
 }

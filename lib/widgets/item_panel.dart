@@ -64,14 +64,11 @@ class _ItemsPanelState extends State<ItemPanel> {
           ///
           selectedIndex = index;
 
-          BpwidgetProps bpWidgetPropsObj = getWidgetProps(
-            widget.items[selectedIndex].widgetType,
-          );
+          BpwidgetProps bpWidgetPropsObj = props;
           widget.onItemClicked!(bpWidgetPropsObj);
           setState(() {});
         },
-        labelText:
-            props.label.isEmpty ? 'label ${index + 1}' : props.controlName,
+        labelText: props.label.isEmpty ? 'label ${index + 1}' : props.label,
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -89,22 +86,9 @@ class _ItemsPanelState extends State<ItemPanel> {
                   enabled:
                       false, // enabled: selectedIndex == index ? true : false,
                   decoration: InputDecoration(
-                    // border: OutlineInputBorder(
-                    //   borderSide: BorderSide(color: Colors.transparent),
-                    // ),
                     hintText: 'Textbox',
                     label: Text('TextField'),
                     floatingLabelStyle: TextStyle(fontSize: 14),
-
-                    // disabledBorder:
-                    //     selectedIndex == index
-                    //         ? OutlineInputBorder(
-                    //           borderRadius: BorderRadius.circular(10),
-                    //           borderSide: GlobalStyles.selectedBorderStyle,
-                    //         )
-                    //         : OutlineInputBorder(
-                    //           borderSide: GlobalStyles.unselectedBorderStyle,
-                    //         ),
                   ),
                 ),
               ),
@@ -119,13 +103,11 @@ class _ItemsPanelState extends State<ItemPanel> {
         onTapDraggedControl: () {
           selectedIndex = index;
 
-          BpwidgetProps bpWidgetPropsObj = getWidgetProps(
-            widget.items[selectedIndex].widgetType,
-          );
+          BpwidgetProps bpWidgetPropsObj = props;
           widget.onItemClicked!(bpWidgetPropsObj);
           setState(() {});
         },
-        labelText: 'label ${index + 1}',
+        labelText: props.label.isEmpty ? 'label ${index + 1}' : props.label,
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -148,17 +130,6 @@ class _ItemsPanelState extends State<ItemPanel> {
                   inputDecorationTheme: InputDecorationTheme(
                     disabledBorder: InputBorder.none,
                   ),
-                  // inputDecorationTheme: InputDecorationTheme(
-                  //   disabledBorder:
-                  //       selectedIndex == index
-                  //           ? OutlineInputBorder(
-                  //             borderRadius: BorderRadius.circular(10),
-                  //             borderSide: GlobalStyles.selectedBorderStyle,
-                  //           )
-                  //           : OutlineInputBorder(
-                  //             borderSide: GlobalStyles.unselectedBorderStyle,
-                  //           ),
-                  // ),
                 ),
               ),
               selectedIndex == index
@@ -172,9 +143,7 @@ class _ItemsPanelState extends State<ItemPanel> {
         onTapDraggedControl: () {
           selectedIndex = index;
 
-          BpwidgetProps bpWidgetPropsObj = getWidgetProps(
-            widget.items[selectedIndex].widgetType,
-          );
+          BpwidgetProps bpWidgetPropsObj = props;
           widget.onItemClicked!(bpWidgetPropsObj);
           setState(() {});
         },
@@ -218,9 +187,7 @@ class _ItemsPanelState extends State<ItemPanel> {
         onTapDraggedControl: () {
           selectedIndex = index;
 
-          BpwidgetProps bpWidgetPropsObj = getWidgetProps(
-            widget.items[selectedIndex].widgetType,
-          );
+          BpwidgetProps bpWidgetPropsObj = props;
           widget.onItemClicked!(bpWidgetPropsObj);
           setState(() {});
         },
@@ -291,8 +258,13 @@ class _ItemsPanelState extends State<ItemPanel> {
   Widget build(BuildContext context) {
     /// have a copy of dragstartCopy to keep the local copy
     /// so
+    if (widget.items.length > 0) {
+      print(
+        'itemscopy WIDGET ID   => ${widget.items[0].id} ${widget.items[0].bpwidgetProps}',
+      );
+    }
+
     final itemsCopy = List<BPWidget>.from(widget.items);
-    print('itemscopy => $itemsCopy');
     if (widget.panel == Panel.upper) {
       return ListView(
         padding: const EdgeInsets.all(4),
@@ -365,40 +337,5 @@ class _ItemsPanelState extends State<ItemPanel> {
             }).toList(),
       );
     }
-  }
-
-  BpwidgetProps getWidgetProps(PlaceholderWidgets wdg) {
-    return switch (wdg) {
-      PlaceholderWidgets.Textfield => BpwidgetProps(
-        label: 'label ${selectedIndex + 1}',
-        controlName: 'page1_',
-        controlType: 'Textbox',
-      ),
-      PlaceholderWidgets.Dropdown => BpwidgetProps(
-        label: 'label ${selectedIndex + 1}',
-        controlName: 'page1_',
-        controlType: 'Dropdown',
-      ),
-      PlaceholderWidgets.Checkbox => BpwidgetProps(
-        label: 'label ${selectedIndex + 1}',
-        controlName: 'page1_',
-        controlType: 'Checkbox',
-      ),
-      PlaceholderWidgets.Radio => BpwidgetProps(
-        label: 'label ${selectedIndex + 1}',
-        controlName: 'page1_',
-        controlType: 'Radio',
-      ),
-      PlaceholderWidgets.Button => BpwidgetProps(
-        label: 'label ${selectedIndex + 1}',
-        controlName: 'page1_',
-        controlType: 'Button',
-      ),
-      PlaceholderWidgets.Label => BpwidgetProps(
-        label: 'label ${selectedIndex + 1}',
-        controlName: 'page1_',
-        controlType: 'Textfield',
-      ),
-    };
   }
 }

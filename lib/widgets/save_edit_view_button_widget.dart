@@ -1,12 +1,14 @@
 import 'package:dashboard/bloc/bpwidgetprops/bpwidget_props_bloc.dart';
 import 'package:dashboard/bloc/bpwidgets/bpwidget_bloc.dart';
+import 'package:dashboard/bloc/bpwidgets/model/bpwidget.dart';
 import 'package:dashboard/widgets/json_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SaveEditViewButtonWidget extends StatelessWidget {
   final String jsonHeaderName;
-  const SaveEditViewButtonWidget({super.key, required this.jsonHeaderName});
+  final List<BPWidget> JsonValue;
+  const SaveEditViewButtonWidget({super.key, required this.jsonHeaderName, required this.JsonValue});
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -33,16 +35,18 @@ class SaveEditViewButtonWidget extends StatelessWidget {
           icon: Icons.visibility,
           onPressed: () {
             try {
-              final listbpWidgetProps = context.read<BpwidgetBloc>().state;
-              final Map<String,dynamic> jsonObject = listbpWidgetProps.toMap();
-              print("final bpWidgetPropsList $jsonObject");
+              final listbpWidgetProps = JsonValue;
+              final Map<String,dynamic> jsonWholeObject = {
+                "BpWidgetList" : listbpWidgetProps.map((e) => e.toMap()).toList()
+              };
+              print("final bpWidgetPropsList $jsonWholeObject");
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder:
                       (_) => JsonViewer(
                         jsonHeader: jsonHeaderName,
-                        jsonObject: jsonObject
+                        jsonObject: jsonWholeObject
                       )
                 ),
               );

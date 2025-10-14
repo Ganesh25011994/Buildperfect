@@ -16,3 +16,4 @@ class BPWidgetPropsSave extends BpwidgetPropsEvent {
   final BpwidgetProps props;
   BPWidgetPropsSave({required this.props});
 }
+

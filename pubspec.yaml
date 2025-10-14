@@ -20,7 +20,6 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.7.2
-
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -31,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   go_router: ^15.1.1
-  intl: ^0.18.1
+  intl: ^0.20.2
   dotted_border: ^3.1.0
   super_drag_and_drop: ^0.9.1
 
@@ -43,6 +42,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   equatable: ^2.0.7
   flutter_json: ^0.0.5
+  device_preview: ^1.2.0
 
 dev_dependencies:
   flutter_test:

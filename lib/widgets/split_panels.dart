@@ -1,19 +1,22 @@
 /*
     @auth     : karthick.d    06/10/2025
     @desc     : parent container for all the three panel
-                split_panel
+                split_panel - keep the list of BPWidgt which app
                   items_panel
-
+                
 */
 import 'dart:math';
 
+import 'package:dashboard/appdata/page/page_global_constants.dart';
 import 'package:dashboard/bloc/bpwidgetprops/bpwidget_props_bloc.dart';
 import 'package:dashboard/bloc/bpwidgetprops/model/bpwidget_props.dart';
 import 'package:dashboard/bloc/bpwidgets/bpwidget_bloc.dart';
 import 'package:dashboard/bloc/bpwidgets/model/bpwidget.dart';
 import 'package:dashboard/types/drag_drop_types.dart';
+import 'package:dashboard/utils/math_utils.dart';
 import 'package:dashboard/widgets/item_panel.dart';
 import 'package:dashboard/widgets/my_drop_region.dart';
+import 'package:dashboard/widgets/preview_Screen/mobile_screen.dart';
 import 'package:dashboard/widgets/right_panel.dart';
 import 'package:dashboard/widgets/save_edit_view_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -29,19 +32,13 @@ class SplitPanel extends StatefulWidget {
 }
 
 class _SplitPanelState extends State<SplitPanel> {
-  /// Todo1 : CREATE COLLECTION OF BPWIDGET
-
-  final List<PlaceholderWidgets> _upper = [];
+  /// BPPageController named constructor BPPageController.loadNPages(5)
+  ///  to create pages on the fly , the created pages will be loaded in
+  ///  the left panel -> pages panel where user can select pages to configure
+  /// BPWidgets
+  final bpController = BPPageController.loadNPages(5);
   List<BPWidget> upper = [];
-  final List<PlaceholderWidgets> _lower = [
-    PlaceholderWidgets.Textfield,
-    PlaceholderWidgets.Dropdown,
-    PlaceholderWidgets.Checkbox,
-    PlaceholderWidgets.Radio,
-    PlaceholderWidgets.Button,
-    PlaceholderWidgets.Label,
-  ];
-
+  bool previewShow = false;
   final List<BPWidget> lower = [
     BPWidget(
       bpwidgetProps: BpwidgetProps(
@@ -122,15 +119,35 @@ class _SplitPanelState extends State<SplitPanel> {
     dropPreview = update;
   });
 
+  /// this function invoked when the formcontrol widget dragged and dropped to
+  /// central panel , unique id is assigned to id property of BPWidgetProps
+  ///
   void drop() {
     setState(() {
       if (dropPreview!.$2 == Panel.upper) {
+        final uniqueID = MathUtils.generateUniqueID();
+        // print('onDrop => ${lower[dropPreview!.$1].bpwidgetProps}');
+        print('hoveringData!.widgetType => ${hoveringData!.widgetType.name}');
+        hoveringData = BPWidget(
+          widgetType: hoveringData!.widgetType,
+          id: uniqueID,
+          bpwidgetProps: BpwidgetProps(
+            label: '',
+            controlName:
+                '${bpController.pagesRegistry.entries.first.value.pageName}_',
+            controlType: hoveringData!.widgetType.name,
+            id: uniqueID,
+          ),
+        );
+
+        print('hoveringData => ${hoveringData!.id}');
         upper.insert(max(dropPreview!.$1, upper.length), hoveringData!);
       }
     });
   }
 
   void onItemClickRef(BpwidgetProps widget) {
+    print('onItemClickRef => ${widget}');
     selectedWidget = widget;
     setState(() {});
   }
@@ -138,17 +155,66 @@ class _SplitPanelState extends State<SplitPanel> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<BpwidgetBloc, BpwidgetState>(
+      /// listener method will be invoked when ever the BPWidgetState objet
+      /// changes . in our case whenever we are adding the Bpwidgets in
+      /// List<BpWidgets>
       listener: (context, state) {
         print(
           'inside splitpanel builder method => ${state.bpWidgetsList?.length} ${state.bpWidgetsList![0].bpwidgetProps}',
         );
-        upper = state.bpWidgetsList!;
+
+        final upperFiltered = upper.where((u) {
+          return u.id == state.bpWidgetsList![0].bpwidgetProps!.id;
+        });
+        final indexOfSelectedBpWidget = upper.indexOf(upperFiltered.first);
+        if (indexOfSelectedBpWidget != -1) {
+          BPWidget _upper = upperFiltered.first;
+
+          _upper.bpwidgetProps = _upper.bpwidgetProps!.copyWith(
+            controlName: state.bpWidgetsList![0].bpwidgetProps!.controlName,
+            label: state.bpWidgetsList![0].bpwidgetProps!.label,
+            controlType: state.bpWidgetsList![0].bpwidgetProps!.controlType,
+            isRequired: state.bpWidgetsList![0].bpwidgetProps!.isRequired,
+            isVerificationRequired:
+                state.bpWidgetsList![0].bpwidgetProps!.isVerificationRequired,
+            max: state.bpWidgetsList![0].bpwidgetProps!.max,
+            min: state.bpWidgetsList![0].bpwidgetProps!.min,
+            validationPatterns:
+                state.bpWidgetsList![0].bpwidgetProps!.validationPatterns,
+            id: state.bpWidgetsList![0].bpwidgetProps!.id,
+          );
+          print(_upper.bpwidgetProps!.label);
+          // _upper.copyWith(bpwidgetProps: state.bpWidgetsList![0].bpwidgetProps);
+          upper[indexOfSelectedBpWidget] = _upper;
+          print(upper[0].bpwidgetProps!.label);
+        }
       },
       builder: (context, state) {
+        print(
+          'total pages => ${bpController.pagesRegistry.entries.first.value.pageName}',
+        );
+
         return Scaffold(
           appBar: AppBar(
-            title: Text(state.bpWidgetsList![0].widgetType.name),
+            title: Text('BuildPerfect'), 
             elevation: 2,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  // setState(() {
+                    
+                  // });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (_) => MobileScreen()
+                    ),
+                  );
+                }, 
+                icon: Icon(Icons.play_circle_fill_sharp)
+              ),
+            ]
           ),
           body: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
@@ -239,6 +305,7 @@ class _SplitPanelState extends State<SplitPanel> {
                               children: [
                                 SaveEditViewButtonWidget(
                                   jsonHeaderName: "BPWidget",
+                                  JsonValue: upper
                                 ),
                               ]
                             ),
