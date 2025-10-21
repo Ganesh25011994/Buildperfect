@@ -214,7 +214,7 @@ class _SplitPanelState extends State<SplitPanel> {
                     context,
                     MaterialPageRoute(
                       builder:
-                          (_) => MobileScreen()
+                          (_) => MobileScreen(pageData: upper)
                     ),
                   );
                 }, 
