@@ -12,13 +12,13 @@ class KeyValueReactiveTextbox extends StatefulWidget {
   final double width;
   final String labeltext;
   final String formControlName;
-  final ReactiveFormFieldCallback<String>? onChnage;
-  const KeyValueReactiveTextbox({
+  final ReactiveFormFieldCallback<String>? onChange;
+  KeyValueReactiveTextbox({
     super.key,
     required this.width,
     required this.labeltext,
     required this.formControlName,
-    this.onChnage
+    this.onChange,
   });
 
   @override
@@ -49,9 +49,9 @@ class _KeyValueTextboxState extends State<KeyValueReactiveTextbox> {
           height: 25,
 
           child: ReactiveTextField<String>(
+            onChanged: widget.onChange,
             formControlName: widget.formControlName,
             style: TextStyle(fontSize: 12),
-            onChanged: widget.onChnage,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 8),
               border: OutlineInputBorder(),

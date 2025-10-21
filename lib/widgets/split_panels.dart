@@ -8,6 +8,8 @@
 import 'dart:math';
 
 import 'package:dashboard/appdata/page/page_global_constants.dart';
+import 'package:dashboard/appstyles/global_colors.dart';
+import 'package:dashboard/bloc/bpwidgetaction/model/action/bpwidget_action.dart';
 import 'package:dashboard/bloc/bpwidgetprops/bpwidget_props_bloc.dart';
 import 'package:dashboard/bloc/bpwidgetprops/model/bpwidget_props.dart';
 import 'package:dashboard/bloc/bpwidgets/bpwidget_bloc.dart';
@@ -36,7 +38,10 @@ class _SplitPanelState extends State<SplitPanel> {
   ///  to create pages on the fly , the created pages will be loaded in
   ///  the left panel -> pages panel where user can select pages to configure
   /// BPWidgets
-  final bpController = BPPageController.loadNPages(5);
+  ///
+  BPPageController bpController = BPPageController.loadNPages(5);
+
+  ///
   List<BPWidget> upper = [];
   bool previewShow = false;
   final List<BPWidget> lower = [
@@ -94,11 +99,7 @@ class _SplitPanelState extends State<SplitPanel> {
   PanelLocation? dropPreview;
 
   BPWidget? hoveringData;
-  BpwidgetProps selectedWidget = BpwidgetProps(
-    label: '',
-    controlName: '',
-    controlType: '',
-  );
+  BPWidget? selectedWidgetProps;
 
   /// this method is called when the itemplaceholder is dragged
   /// it's set  the state -> dragStart and data state properties
@@ -127,7 +128,7 @@ class _SplitPanelState extends State<SplitPanel> {
       if (dropPreview!.$2 == Panel.upper) {
         final uniqueID = MathUtils.generateUniqueID();
         // print('onDrop => ${lower[dropPreview!.$1].bpwidgetProps}');
-        print('hoveringData!.widgetType => ${hoveringData!.widgetType.name}');
+        print('hoveringData!.widgetType => ${hoveringData!.widgetType!.name}');
         hoveringData = BPWidget(
           widgetType: hoveringData!.widgetType,
           id: uniqueID,
@@ -135,9 +136,12 @@ class _SplitPanelState extends State<SplitPanel> {
             label: '',
             controlName:
                 '${bpController.pagesRegistry.entries.first.value.pageName}_',
-            controlType: hoveringData!.widgetType.name,
+            controlType: hoveringData!.widgetType!.name,
             id: uniqueID,
           ),
+          bpwidgetAction: [
+            BpwidgetAction.initWithId(id: uniqueID),
+          ], // list of formcontrolactions
         );
 
         print('hoveringData => ${hoveringData!.id}');
@@ -146,9 +150,9 @@ class _SplitPanelState extends State<SplitPanel> {
     });
   }
 
-  void onItemClickRef(BpwidgetProps widget) {
+  void onItemClickRef(BPWidget widget) {
     print('onItemClickRef => ${widget}');
-    selectedWidget = widget;
+    selectedWidgetProps = widget;
     setState(() {});
   }
 
@@ -183,7 +187,9 @@ class _SplitPanelState extends State<SplitPanel> {
                 state.bpWidgetsList![0].bpwidgetProps!.validationPatterns,
             id: state.bpWidgetsList![0].bpwidgetProps!.id,
           );
-          print(_upper.bpwidgetProps!.label);
+
+          _upper.bpwidgetAction = state.bpWidgetsList![0].bpwidgetAction;
+
           // _upper.copyWith(bpwidgetProps: state.bpWidgetsList![0].bpwidgetProps);
           upper[indexOfSelectedBpWidget] = _upper;
           print(upper[0].bpwidgetProps!.label);
@@ -226,7 +232,9 @@ class _SplitPanelState extends State<SplitPanel> {
               final leftPanelWidth = constraints.maxWidth / 4;
               final centerPanelWidth = constraints.maxWidth / 2;
               final rightPanelWidth =
-                  constraints.maxWidth - (leftPanelWidth + centerPanelWidth);
+                  constraints.maxWidth -
+                  (leftPanelWidth + centerPanelWidth) +
+                  80;
               return Padding(
                 padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
                 child: Stack(
@@ -259,7 +267,7 @@ class _SplitPanelState extends State<SplitPanel> {
                       width: 2,
                       height: constraints.maxHeight,
                       left: leftPanelWidth,
-                      child: ColoredBox(color: Colors.black),
+                      child: ColoredBox(color: GlobalColors.centerPanelBGColor),
                     ),
                     Positioned(
                       // centerpanel for dragtarget
@@ -267,7 +275,9 @@ class _SplitPanelState extends State<SplitPanel> {
                       height: constraints.maxHeight,
                       left: leftPanelWidth,
                       child: DecoratedBox(
-                        decoration: BoxDecoration(color: Colors.blue.shade300),
+                        decoration: BoxDecoration(
+                          color: GlobalColors.centerPanelBGColor,
+                        ),
                         child: MyDropRegion(
                           onDrop: drop,
                           updateDropPreview: updateDropPreview,
@@ -299,20 +309,14 @@ class _SplitPanelState extends State<SplitPanel> {
                         /// datasource panel
                         child: Column(
                           children: [
-                            SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                SaveEditViewButtonWidget(
-                                  jsonHeaderName: "BPWidget",
-                                  JsonValue: upper
-                                ),
-                              ]
+                            SaveEditViewButtonWidget(
+                              jsonHeaderName: "BPWidget", 
+                              JsonValue: upper
                             ),
                             RightPanel(
                               width: rightPanelWidth,
                               height: constraints.maxHeight,
-                              props: selectedWidget,
+                              props: selectedWidgetProps,
                             ),
                           ],
                         ),
